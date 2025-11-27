@@ -1,0 +1,96 @@
+/* Global */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #fdf6fb; /* soft pastel background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #ff6f91; /* cute pink accent */
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Titles inside cards */
+.card h2 {
+    color: #ff6f91;
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn {
+    background-color: #ff6f91;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background-color: #ff4c70;
+    transform: scale(1.05);
+}
+
+/* File input */
+.file-input {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Video */
+#webcam {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+/* Result card */
+.result-card p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+.result-card span {
+    font-weight: 600;
+    color: #ff6f91;
+}

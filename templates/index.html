@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Emotion Detector🎭</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Internal CSS for Professional Purple Theme -->
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f7ff; /* soft neutral background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #6a5acd; /* professional purple accent */
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #6a5acd;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #6a5acd;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #7f6fff;
+            transform: scale(1.05);
+        }
+
+        /* File Input */
+        .file-input {
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        /* Video */
+        #webcam {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        /* Result Card */
+        .result-card p {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .result-card span {
+            font-weight: 600;
+            color: #6a5acd;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Facial Emotion Recognition</h1>
+        <p>Detect emotions from your face in real-time or via image upload</p>
+    </header>
+
+    <main>
+
+        <!-- Webcam Section -->
+        <div class="card">
+            <h2>Live Webcam Capture</h2>
+            <video id="webcam" autoplay playsinline></video>
+            <button id="captureBtn" class="btn">Capture Image</button>
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="card">
+            <h2>Upload an Image</h2>
+            <input type="file" id="fileInput" class="file-input">
+        </div>
+
+        <!-- Result Section -->
+        <div class="card result-card">
+            <h2>Prediction Result</h2>
+            <p><strong>Emotion:</strong> <span id="emotion">--</span></p>
+            <p><strong>Description:</strong> <span id="description">--</span></p>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const video = document.getElementById("webcam");
+
+    // Access webcam
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => console.error("Error accessing webcam: ", err));
+
+    // Capture image from webcam
+    document.getElementById("captureBtn").onclick = async () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve));
+
+        const formData = new FormData();
+        formData.append("image", blob, "webcam.jpg");
+
+        const response = await fetch("/predict", { method: "POST", body: formData });
+        const data = await response.json();
+
+        document.getElementById("emotion").textContent = data.emotion;
+        document.getElementById("description").textContent = data.description;
+    };
+
+    // Upload image and predict
+    document.getElementById("fileInput").onchange = async function () {
+        const formData = new FormData();
+        formData.append("image", this.files[0]);
+
+        const response = await fetch("/predict", { method: "POST", body: formData });
+        const data = await response.json();
+
+        document.getElementById("emotion").textContent = data.emotion;
+        document.getElementById("description").textContent = data.description;
+    };
+</script>
+
+</body>
+</html>
